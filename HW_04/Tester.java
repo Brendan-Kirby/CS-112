@@ -1,3 +1,40 @@
+/* Tester.java - Tests functionality of custom exceptions as defined in
+ * 		 CoinNameException and CoinValueException classes with
+ * 		 a simulation of a piggy bank.
+ * 
+ * Author:  Brendan Kirby
+ * Module:  04
+ * Project: 1
+ * 
+ * Algorithm:
+ * 
+ * WHILE not finished
+ * 
+ * 		Prompt user to enter the name of a coin
+ * 		Read response
+ * 			- Can throw CoinNameException
+ * 				+ If thrown, increment error count and try again
+ * 
+ * 		Reset error count to zero
+ * 
+ * 		Prompt user to enter the value of the named coin
+ * 		Read response
+ * 			- Can throw CoinValueException
+ * 				+ If thrown, increment error count and try again
+ * 		Increment running total by the value of the coin entered
+ * 		
+ *		Prompt user to enter whether they have another coin to enter
+ * 			- If they do, set not finished to true
+ * 			- If they do not, set not finished to false
+ * END WHILE
+ * 
+ * Print table with number of each coin entered, along with the total value of
+ * all coins entered
+ * 
+ * Exit program
+ * 
+ */
+ 
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
@@ -6,6 +43,7 @@ public class Tester {
 
 	public static void main(String[] args) {
 	
+		//Declaration & initialization / instantiation
 		String coinNamePrompt = "Enter the name of a coin : ";
 		String coinValuePrompt = "Enter the value of that coin in cents : ";
 		String continuePrompt = "Do you have another coin to enter? <y/n> : ";
@@ -29,10 +67,12 @@ public class Tester {
 		boolean notFinished = true;
 		boolean needsContinueInput = true;
 		
+		//Getting user data on coins
 		while (notFinished) {
 			
 			needsContinueInput = true;	
-				
+			
+			//checking validity of coin name	
 			while (nameNotValid) {
 				try {
 					
@@ -71,6 +111,7 @@ public class Tester {
 				}
 				catch (CoinNameException e) {
 					
+					System.out.println(e.getMessage());
 					errorCounter++;
 					nameNotValid = true;
 				}
@@ -82,8 +123,11 @@ public class Tester {
 				}		
 			}
 			
+			//reset error count
 			errorCounter = 0;
 			
+			//checking validity of coin value entered, according to validated 
+			//coin name
 			while (valueNotValid) {
 				try {
 					
@@ -154,23 +198,27 @@ public class Tester {
 				}			
 				catch (CoinValueException e) {
 					
+					System.out.println(e.getMessage());
 					errorCounter++;
 					valueNotValid = true;
 				}
 				catch (InputMismatchException e) {
 					
+					e = new InputMismatchException("Invalid value - try again");
 					System.out.println(e.getMessage());
 					errorCounter++;
 					valueNotValid = true;
 				}
 				catch (NoSuchElementException e) {
 					
+					e = new NoSuchElementException("Invalid value - try again");
 					System.out.println(e.getMessage());
 					errorCounter++;
 					valueNotValid = true;
 				}
 				catch (IllegalStateException e) {
 					
+					e = new IllegalStateException("Invalid value - try again");
 					System.out.println(e.getMessage());
 					errorCounter++;
 					valueNotValid = true;
@@ -183,8 +231,10 @@ public class Tester {
 				}						
 			}
 			
+			//reset error counter
 			errorCounter = 0;
 			
+			//error checking input on whether the user has more coins to enter
 			while (needsContinueInput) {
 			
 				System.out.print(continuePrompt);
@@ -214,15 +264,19 @@ public class Tester {
 			}		
 		}
 		
+		//convert total in cents to a value in the more standard dollar notation
 		total = valueSum / 100.00;
 		
+		//formatting and output of table to the console
 		lineFormat = "%1s" + "%8d" + "%2s" + "%8d" + "%2s" + "%6d" + "%2s" + "%9d" + "%2s" + "%13d" + "%2s" + "%8s" + "%5.2f" + "%1s";
 		
-		System.out.print("|-------------------------------------------------------------------|\n");
+		System.out.print("|---------|---------|-------|----------|--------------|-------------|\n");
 		System.out.print("| Pennies | Nickels | Dimes | Quarters | Half-Dollars | Total Value |\n");
 		System.out.print("|---------|---------|-------|----------|--------------|-------------|\n");
 		System.out.printf(lineFormat, "|", numPennies, "|", numNickels, "|", numDimes, "|", numQuarters, "|", numHalfDollars, "|", "$ ", total, "|\n");
-		System.out.print("|-------------------------------------------------------------------|");
+		System.out.print("|---------|---------|-------|----------|--------------|-------------|");
+		
+		System.out.print("\n\n");
 				
 	}
 }
