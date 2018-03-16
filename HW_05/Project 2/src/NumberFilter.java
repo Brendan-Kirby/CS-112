@@ -39,6 +39,7 @@ import java.io.PrintWriter;
 
 public class NumberFilter {
 	
+	//insertion sort, orders the argument integer array from least to greatest
 	public static int[] sort(int[] toSort) {
 		
 		int smallest = 0;
@@ -59,6 +60,8 @@ public class NumberFilter {
 		return toSort;
 	}
 
+	//filters a sorted integer array for duplicates, by checking inequality
+	//between neighboring cells in the argument array.
 	public static int[] filter(int[] toFilter) {
 
 		int[] validInts = new int[toFilter.length];
@@ -108,12 +111,14 @@ public class NumberFilter {
 			
 			reader = new Scanner(System.in);
 			
+			//getting user input for input & output file names
 			System.out.print("Enter the name of the file you want to filter : ");
 			readName = reader.next();
 			System.out.print("What do you want the output file to be named? : ");
 			writeName = reader.next();
 			reader.close();
 			
+			//defining the read and write path for file input & output streams based on the entered file names 
 			readPath = "C:\\Users\\brend\\Desktop\\CS 112 Workspace\\HW_05\\Project 2\\src\\" + readName;
 			writePath = "C:\\Users\\brend\\Desktop\\CS 112 Workspace\\HW_05\\Project 2\\src\\" + writeName;
 			
@@ -121,7 +126,7 @@ public class NumberFilter {
 			
 			System.out.println("\nReading " + readName + " contents . . .");
 			
-			while (reader.hasNextInt()) {
+			while (reader.hasNextInt()) { //reads each integer in the file to determine input array size
 				
 				reader.nextInt();
 				arraySize++;
@@ -133,19 +138,21 @@ public class NumberFilter {
 			
 			reader = new Scanner(new FileInputStream(readPath));
 			
-			for (int i = 0; i < readInts.length; i++) {
+			for (int i = 0; i < readInts.length; i++) { //stores each integer in the input file into the array 
 				
 				readInts[i] = reader.nextInt();
 			}
 			
 			reader.close();	
 			
+			//sorting and filtering duplicate integers out of the input array
 			System.out.println("\n\nFiltering duplicates out of " + readName + " . . .\n");
 			writeInts = filter(sort(readInts));
-			
+		
 			System.out.println("\nWriting filtered list to " + writeName + " . . .\n\n");	
 			writer = new PrintWriter(new FileOutputStream(writePath));
 			
+			//writing the sorted input array to the specified file
 			for (int i = 0; i < writeInts.length; i++) {
 				
 				writer.println(writeInts[i]);
@@ -153,6 +160,7 @@ public class NumberFilter {
 			
 			writer.close();
 			
+			//printing stats on how many integers were read, filtered, and written
 			System.out.println("Finished writing filtered list to " +
 							   writeName + 
 							   ", found " + 
